@@ -46,3 +46,22 @@ alert http any any -> any any (msg:"Escaneo de vulnerabilidades web con Nikto"; 
 
 # Detección de intentos de Path Traversal (LFI)
 alert http any any -> any any (msg:"Intento de Path Traversal (/etc/passwd)"; content:"/etc/passwd"; http_uri; classtype:attempted-admin; sid:1000010; rev:1;)
+```
+### 1. Detección en Suricata (IDS)
+Se configuraron reglas personalizadas en `/etc/suricata/rules/local.rules` para detectar desde escaneos básicos hasta vulnerabilidades a nivel de aplicación (OWASP Top 10).
+
+> 📁 *Puedes revisar mi set de reglas completo...*
+
+**Ejemplos de reglas implementadas:**
+(Aquí va tu recuadro oscuro con el código de Nikto y Path Traversal)
+
+---
+
+## 📊 Simulación de Ataque y Evidencia (Screenshots)
+
+Para validar la arquitectura, se simuló un ataque de reconocimiento desde la máquina Kali Linux (Red Team) hacia la infraestructura monitoreada.
+
+### 1. Evidencia de Detección en Logs (Suricata)
+Al lanzar el escaneo, las reglas personalizadas configuradas en el IDS detectaron inmediatamente el reconocimiento mediante la inspección profunda de paquetes (DPI), registrando el ataque en el `fast.log`:
+
+![Detección de Nmap y SSH en Suricata](ataque-nmap.jpeg)
