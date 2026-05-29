@@ -2,7 +2,7 @@
 
 ## 🎯 Objetivo del Proyecto
 Implementación de una arquitectura de seguridad defensiva en un entorno de laboratorio para la detección, gestión y mitigación automatizada de amenazas en la red. 
-
+![Dashboard General de Wazuh - SOC Lab](wazuh-dashboard-overview.jpg)
 ## 🗺️ Topología de Red y Arquitectura del Laboratorio
 
 El entorno fue diseñado simulando una red corporativa segmentada, utilizando máquinas virtuales independientes para representar cada rol dentro del ciclo de ataque, detección y respuesta:
