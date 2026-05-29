@@ -65,3 +65,18 @@ Para validar la arquitectura, se simuló un ataque de reconocimiento desde la m�
 Al lanzar el escaneo, las reglas personalizadas configuradas en el IDS detectaron inmediatamente el reconocimiento mediante la inspección profunda de paquetes (DPI), registrando el ataque en el `fast.log`:
 
 ![Detección de Nmap y SSH en Suricata](ataque-nmap.jpeg)
+
+### 2. Correlación y Visualización en el SIEM (Wazuh)
+Los logs generados por el IDS en la red fueron recolectados por el agente, normalizados y presentados en el módulo de *Threat Hunting* de Wazuh, permitiendo una visualización clara y estructurada del incidente de seguridad:
+
+![Alertas de Suricata en el Dashboard de Wazuh](wazuh-alertas-suricata.jpeg)
+
+### 3. Respuesta Activa y Mitigación (Fail2Ban)
+Al detectar la actividad maliciosa recurrente, el sistema de Prevención de Intrusiones (IPS) ejecutó la política de respuesta activa preconfigurada. La IP del atacante (`192.168.50.166`) fue baneada exitosamente a nivel de firewall mediante `iptables`, mitigando la amenaza de forma automatizada:
+
+![Bloqueo de IP del atacante en Fail2Ban](fail2ban-baneo.jpeg)
+
+### 4. Alertamiento en Tiempo Real (Integración API Telegram)
+Para garantizar una monitorización 24/7 y reducir los tiempos de respuesta, se implementó un script en Python que intercepta las alertas de alta prioridad del SIEM y las envía al dispositivo móvil del analista a través de la API de Telegram. La notificación incluye contexto crítico como la descripción del ataque y las direcciones IP involucradas:
+
+![Notificaciones en tiempo real vía Telegram](bot-telegram.jpeg)
