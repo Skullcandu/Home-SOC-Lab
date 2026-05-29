@@ -22,3 +22,25 @@ El entorno fue diseñado simulando una red corporativa segmentada, utilizando m�
 
 * **🔍 OpenVAS (Gestión de Vulnerabilidades):**
   * Desplegado en una máquina virtual independiente para ejecutar análisis de vulnerabilidades y auditorías preventivas sobre los nodos de la red.
+
+## ⚙️ Configuración y Despliegue
+
+Para garantizar la estabilidad del entorno, los servicios de monitoreo y detección se ejecutan como demonios en el servidor Ubuntu. A continuación, se detallan los comandos de validación de los servicios core:
+
+```bash
+# Verificación de estado del SIEM y el IDS
+sudo systemctl status wazuh-manager
+sudo systemctl status suricata
+sudo systemctl status fail2ban
+```
+### 1. Detección en Suricata (IDS)
+Se configuraron reglas personalizadas en `/etc/suricata/rules/local.rules` para detectar desde escaneos básicos hasta vulnerabilidades a nivel de aplicación (OWASP Top 10).
+> 📁 *Puedes revisar mi set de reglas completo (SQLi, XSS, DoS, Path Traversal) en la carpeta [`configs/suricata_local.rules`](./configs/suricata_local.rules)*.
+
+**Ejemplos de reglas implementadas:**
+```yaml
+# Detección de herramientas de escaneo web automatizado
+alert http any any -> any any (msg:"Escaneo de vulnerabilidades web con Nikto"; content:"Nikto"; http_user_agent; nocase; classtype:attempted-recon; sid:1000011; rev:1;)
+
+# Detección de intentos de Path Traversal (LFI)
+alert http any any -> any any (msg:"Intento de Path Traversal (/etc/passwd)"; content:"/etc/passwd"; http_uri; classtype:attempted-admin; sid:1000010; rev:1;)
