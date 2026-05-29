@@ -1,0 +1,35 @@
+# =====================================================================
+# CONFIGURACIÓN DE RESPUESTA ACTIVA (FAIL2BAN) - HOME SOC LAB
+# Autor: Daniel Neira Castañeda
+# Descripción: Políticas de bloqueo dinámico (IPS) a nivel de Firewall.
+# =====================================================================
+
+[DEFAULT]
+# Lista blanca (Whitelist): Previene que el administrador o el SIEM se auto-bloqueen
+ignoreip = 127.0.0.1/8 192.168.1.0/24
+bantime  = 1h
+findtime = 10m
+maxretry = 3
+banaction = iptables-multiport
+
+# --- 1. PROTECCIÓN DE ACCESO ADMINISTRATIVO (SSH) ---
+[sshd]
+enabled = true
+port    = ssh
+logpath = /var/log/auth.log
+backend = systemd
+bantime = 24h
+maxretry = 3
+# Acción: Bloquea intentos de fuerza bruta al servidor tras 3 fallos.
+
+# --- 2. INTEGRACIÓN CON SURICATA (De IDS a IPS) ---
+[suricata]
+enabled = true
+port    = all
+filter  = suricata
+logpath = /var/log/suricata/fast.log
+banaction = iptables-allports
+bantime = 48h
+maxretry = 1
+# Acción: Baneo absoluto (todos los puertos). Un solo hit de una regla 
+# crítica en Suricata detona el bloqueo inmediato de la IP atacante.
